@@ -1,0 +1,17 @@
+# 验证脚本和截图（不参与线上交付）
+shots/
+test_weapp.js
+verify_shell.js
+diag_nav.js
+shots_final.js
+check_tags.py
+
+# 编辑器
+.DS_Store
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+
+# workbuddy
+.workbuddy/
