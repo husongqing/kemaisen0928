@@ -148,7 +148,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue"
 
 /* 状态栏占位：电脑端（显示外壳）页面内容下移 50px，避免与系统状态栏重叠 */
 .page{padding-top:50px}
-.page#pg_splash,.page#pg_profile{padding-top:0}
+.page#pg_splash,.page#pg_profile,.page#pg_entry{padding-top:0}
 
 /* 响应式：电脑端显示手机外壳；窄屏（手机）隐藏外壳，页面铺满全屏 */
 @media (max-width:480px){
@@ -156,11 +156,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue"
   body{padding:0;display:block;overflow-x:hidden}
   .stage{display:block}
   .stage .cap{display:none}
-  .phone{position:fixed;inset:0;border-radius:0;padding:0;box-shadow:none;background:transparent;flex-shrink:0}
+  .phone{position:fixed;inset:0;width:100%;height:100%;border-radius:0;padding:0;box-shadow:none;background:transparent;flex-shrink:0}
   .phone .screen{position:absolute;inset:0;border-radius:0;background:var(--bg)}
   .island,.sysbar,.capsule{display:none}
   .page{padding-top:env(safe-area-inset-top,0px)}
-  .page#pg_splash,.page#pg_profile{padding-top:env(safe-area-inset-top,0px)}
+  .page#pg_splash,.page#pg_profile,.page#pg_entry{padding-top:env(safe-area-inset-top,0px)}
 }
 
 /* ===== 微信导航栏 ===== */
@@ -421,12 +421,157 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue"
 .wxjump .tx .d{font-size:12px;color:var(--t3);margin-top:2px}
 """
 
+# ===== 新增功能（入口页 / 商城 / 支付 / 会员 / 订单 / 防录屏水印）=====
+CSS_EXTRA = r"""
+/* ===== 启动后双入口页 ===== */
+.pg_entry{background:var(--gradMain);align-items:center;justify-content:center}
+.pg_entry .e-glow{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:240px;height:240px;
+  background:radial-gradient(circle,rgba(0,201,255,.4),transparent 70%);filter:blur(30px)}
+.pg_entry .e-logo{width:76px;height:76px;border-radius:20px;box-shadow:0 16px 44px rgba(0,201,255,.45);margin-top:-30px}
+.pg_entry .e-nm{color:#fff;font-size:21px;font-weight:700;letter-spacing:3px;margin-top:14px}
+.pg_entry .e-su{color:rgba(255,255,255,.5);font-size:10.5px;letter-spacing:3px;margin-top:5px}
+.entry-card{width:282px;background:rgba(255,255,255,.97);border-radius:20px;padding:18px;display:flex;align-items:center;gap:14px;
+  margin-top:20px;box-shadow:0 14px 36px rgba(0,0,0,.28);cursor:pointer;transition:transform .18s}
+.entry-card:active{transform:scale(.97)}
+.entry-card .ic{width:52px;height:52px;border-radius:15px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.entry-card .ic.learn{background:var(--gradTech)}
+.entry-card .ic.mall{background:linear-gradient(135deg,#FFB547,#E07A2A)}
+.entry-card .tx{flex:1;text-align:left}
+.entry-card .tx .t{font-size:16px;font-weight:700;color:var(--t1)}
+.entry-card .tx .d{font-size:11.5px;color:var(--t3);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entry-card .ar{color:#c2cad9;flex-shrink:0}
+.entry-note{color:rgba(255,255,255,.45);font-size:10.5px;margin-top:26px}
+.e-ft{position:absolute;bottom:26px;left:0;right:0;text-align:center;color:rgba(255,255,255,.35);font-size:10px;letter-spacing:1px}
+
+/* ===== 科迈森商城（小程序界面模拟） ===== */
+.mall-tip{margin:12px 16px 0;background:rgba(7,193,96,.08);color:#07A055;border-radius:10px;padding:8px 12px;font-size:12px;
+  display:flex;align-items:center;gap:6px;line-height:1.5}
+.mall-banner{margin:12px 16px;height:110px;border-radius:16px;background:linear-gradient(135deg,#061B3A 0%,#0A2540 50%,#0066FF 100%);
+  position:relative;overflow:hidden;padding:16px;display:flex;flex-direction:column;justify-content:center}
+.mall-banner::after{content:'';position:absolute;right:-26px;top:-26px;width:140px;height:140px;
+  background:radial-gradient(circle,rgba(0,201,255,.5),transparent 70%);filter:blur(10px)}
+.mall-banner .t{color:#fff;font-size:17px;font-weight:700;position:relative}
+.mall-banner .d{color:rgba(255,255,255,.72);font-size:12px;margin-top:5px;position:relative}
+.mall-cat{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 16px}
+.mall-cat .mc{background:#fff;border-radius:12px;padding:12px 4px;text-align:center;font-size:11.5px;color:var(--t1);box-shadow:var(--sh)}
+.mall-cat .mc .ic{width:36px;height:36px;border-radius:11px;margin:0 auto 6px;background:rgba(0,152,232,.1);color:var(--cyan2);
+  display:flex;align-items:center;justify-content:center}
+.mall-cat .mc .ic svg{width:19px;height:19px}
+.prod{background:#fff;border-radius:14px;box-shadow:var(--sh);margin:0 16px 12px;display:flex;gap:12px;padding:12px}
+.prod .pic{width:96px;height:96px;border-radius:11px;background:var(--gradMain);background-size:cover;background-position:center;flex-shrink:0}
+.prod .ct{flex:1;min-width:0;display:flex;flex-direction:column}
+.prod .ct .ti{font-size:14px;font-weight:600;line-height:1.4;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.prod .ct .sp{font-size:11.5px;color:var(--t3);margin-top:4px}
+.prod .ct .bo{margin-top:auto;display:flex;align-items:center}
+.prod .ct .bo .pr{font-size:16px;font-weight:800;color:#E0562A}
+.prod .ct .bo .btn.sm{margin-left:auto;height:28px;font-size:11.5px;padding:0 12px}
+
+/* ===== 支付 ===== */
+.pay-amount-card{margin:16px;background:#fff;border-radius:16px;box-shadow:var(--sh);padding:22px;text-align:center}
+.pay-amount-card .lbl{font-size:12.5px;color:var(--t3)}
+.pay-amount-card .amt{font-size:34px;font-weight:800;color:var(--t1);margin-top:6px}
+.pay-amount-card .amt small{font-size:16px;font-weight:600;color:var(--t2)}
+.pay-amount-card .sub{font-size:12px;color:var(--t2);margin-top:6px}
+.payway-card{margin:0 16px;background:#fff;border-radius:14px;box-shadow:var(--sh);overflow:hidden}
+.pw{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid var(--line2);cursor:pointer}
+.pw:last-child{border-bottom:none}
+.pw .pic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0}
+.pw .pic.wx{background:#07C160}
+.pw .pic.site{background:linear-gradient(135deg,#FFB547,#E0962A)}
+.pw .tx{flex:1}
+.pw .tx .t{font-size:14.5px;font-weight:600;color:var(--t1)}
+.pw .tx .d{font-size:11.5px;color:var(--t3);margin-top:2px}
+.pw .radio{width:20px;height:20px;border-radius:50%;border:2px solid #d4dbe8;position:relative;flex-shrink:0;transition:.15s}
+.pw.on .radio{border-color:var(--cyanD);background:var(--cyanD);box-shadow:inset 0 0 0 3.5px #fff}
+/* 微信支付密码底部弹层 */
+.mask.paymask{align-items:flex-end;padding:0}
+.sheet{width:100%;background:#fff;border-radius:20px 20px 0 0;padding:22px 24px 40px;transform:translateY(40%);opacity:.4;transition:.28s}
+.mask.show .sheet{transform:none;opacity:1}
+.sheet .sh-hd{text-align:center;font-size:15px;font-weight:600;color:var(--t1)}
+.sheet .sh-amt{text-align:center;font-size:28px;font-weight:800;margin-top:8px}
+.sheet .dots{display:flex;margin:20px auto 0;width:246px;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.sheet .dots i{flex:1;height:44px;border-right:1px solid var(--line);display:flex;align-items:center;justify-content:center}
+.sheet .dots i:last-child{border-right:none}
+.sheet .dots i::after{content:'';width:10px;height:10px;border-radius:50%;background:#111;opacity:0;transition:opacity .12s}
+.sheet .dots i.f::after{opacity:1}
+.sheet .sh-tip{text-align:center;font-size:12px;color:var(--t3);margin-top:14px}
+/* 支付结果页 */
+.payres{padding:42px 28px;text-align:center}
+.res-ic{width:84px;height:84px;border-radius:50%;margin:0 auto;display:flex;align-items:center;justify-content:center;color:#fff}
+.res-ic.ok{background:linear-gradient(135deg,#0EBD8E,#08A97C);box-shadow:0 12px 30px rgba(14,189,142,.35)}
+.res-ic.warn{background:linear-gradient(135deg,#FFB547,#E0962A);box-shadow:0 12px 30px rgba(224,150,42,.35)}
+.res-ic.vip{background:linear-gradient(135deg,#F7D774,#D4A017);color:#6b4d00;box-shadow:0 12px 30px rgba(212,160,23,.35)}
+.payres .rt{font-size:20px;font-weight:700;margin-top:18px;color:var(--t1)}
+.payres .rd{font-size:12.5px;color:var(--t2);margin-top:8px}
+.payres .res-badges{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.payres .res-note{background:#fff;border-radius:12px;padding:12px 14px;font-size:12.5px;color:var(--t2);line-height:1.75;margin-top:18px;text-align:left}
+.badge.b-vip{background:linear-gradient(135deg,#F7D774,#D4A017);color:#4A3A10}
+
+/* ===== 会员中心 ===== */
+.vipcard{margin:16px;border-radius:18px;padding:20px;color:#fff;position:relative;overflow:hidden;
+  background:linear-gradient(135deg,#2B2410 0%,#4A3A12 45%,#8A6D1F 100%);box-shadow:0 12px 30px rgba(74,58,18,.35)}
+.vipcard::after{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;
+  background:radial-gradient(circle,rgba(247,215,116,.5),transparent 70%);filter:blur(8px)}
+.vipcard .vip-hd{display:flex;align-items:center;justify-content:space-between;position:relative}
+.vipcard .vip-name{font-size:17px;font-weight:700;display:flex;align-items:center;gap:7px}
+.vipcard .vip-tag{font-size:10px;letter-spacing:2px;background:rgba(255,255,255,.16);padding:3px 9px;border-radius:9px}
+.vipcard .vip-desc{font-size:12px;color:rgba(255,255,255,.75);margin-top:14px;position:relative}
+.vipcard .vip-price{font-size:38px;font-weight:800;margin-top:2px;position:relative}
+.vipcard .vip-price span{font-size:13px;font-weight:400;color:rgba(255,255,255,.6)}
+.vipcard .vip-ft{font-size:11px;color:rgba(255,255,255,.5);margin-top:12px;position:relative}
+.cmp-card{margin:0 16px;background:#fff;border-radius:14px;box-shadow:var(--sh);overflow:hidden}
+.cmp-row{display:grid;grid-template-columns:1.15fr 1fr 1fr 1fr;font-size:12px;text-align:center}
+.cmp-row>div{padding:11px 4px;border-bottom:1px solid var(--line2);color:var(--t2);display:flex;align-items:center;justify-content:center}
+.cmp-row.hd>div{background:var(--line2);font-weight:700;color:var(--t1);font-size:11.5px}
+.cmp-row>div:first-child{text-align:left;justify-content:flex-start;padding-left:14px;font-weight:600;color:var(--t1)}
+.cmp-row .ok{color:var(--ok);font-weight:700}
+.cmp-row .no{color:#c2cad9}
+.vip-entry{margin:12px 16px 0;background:linear-gradient(135deg,#2B2410,#4A3A12 45%,#8A6D1F);border-radius:14px;padding:13px 14px;
+  display:flex;align-items:center;gap:11px;color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(74,58,18,.3);position:relative;overflow:hidden}
+.vip-entry::after{content:'';position:absolute;right:-24px;top:-30px;width:110px;height:110px;
+  background:radial-gradient(circle,rgba(247,215,116,.4),transparent 70%);filter:blur(6px)}
+.vip-entry .ic{width:36px;height:36px;border-radius:11px;background:rgba(247,215,116,.16);color:#F7D774;display:flex;
+  align-items:center;justify-content:center;flex-shrink:0;position:relative}
+.vip-entry .tx{flex:1;position:relative}
+.vip-entry .tx .t{font-size:14px;font-weight:700}
+.vip-entry .tx .d{font-size:11px;color:rgba(255,255,255,.6);margin-top:2px}
+.vip-entry .go{color:#F7D774;font-size:12px;font-weight:600;position:relative;flex-shrink:0}
+
+/* ===== 我的订单 ===== */
+.order-card{margin:0 16px 12px;background:#fff;border-radius:14px;box-shadow:var(--sh);padding:14px}
+.order-card .oh{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.order-card .oh .t{font-size:14.5px;font-weight:700;line-height:1.4}
+.order-card .om{font-size:12px;color:var(--t3);margin-top:6px;line-height:1.7}
+.order-card .of{display:flex;align-items:center;margin-top:10px}
+.order-card .of .pr{font-size:16px;font-weight:800;margin-left:auto;color:var(--t1)}
+
+/* ===== 视频防录屏水印 ===== */
+.player-ctrl .tools{justify-content:space-between;gap:4px}
+.player-ctrl .tools .ic{flex:1;white-space:nowrap}
+.player-area .wm{position:absolute;top:23%;left:0;z-index:42;color:rgba(255,255,255,.38);font-size:11.5px;letter-spacing:1px;
+  pointer-events:none;white-space:nowrap;text-shadow:0 1px 3px rgba(0,0,0,.5);animation:wmMove 15s linear infinite}
+@keyframes wmMove{from{transform:translateX(-330px)}to{transform:translateX(410px)}}
+.player-area .wm2{position:absolute;right:12px;top:14px;z-index:42;color:rgba(255,255,255,.32);font-size:9.5px;pointer-events:none;
+  display:flex;align-items:center;gap:4px;background:rgba(0,0,0,.22);padding:3px 8px;border-radius:9px}
+
+/* ===== 课程详情权限说明 ===== */
+.perm-row{display:flex;gap:10px;align-items:flex-start;margin-top:10px;font-size:12.5px;color:var(--t2);line-height:1.6}
+.perm-row .badge{flex-shrink:0;margin-top:1px}
+.chapter-lock{margin:12px 16px;background:#fff;border:1px dashed #cdd6e3;border-radius:12px;padding:12px 14px;font-size:13px;
+  color:var(--t2);display:flex;align-items:center;gap:9px;cursor:pointer}
+.chapter-lock svg{flex-shrink:0;color:var(--warn)}
+.chapter-lock .lk{margin-left:auto;color:var(--cyan2);font-size:12px;font-weight:600;flex-shrink:0}
+"""
+
 JS = r"""
 const TABS = ['home','course','activity','news','profile'];
 const TAB_LABEL = {home:'首页',course:'课程',activity:'培训',news:'资讯',profile:'我的'};
 let stack = [];           // 导航栈（非 tab 页）
 let curTab = 'home';
 var userState = 'approved';  // approved | review
+let curRoot = 'pg_entry';     // 当前根页面（入口页 / 商城）
+let payMethod = 'wx';        // wx | site（现场支付）
+let payCtx = 'act';          // act | member（支付上下文）
 const $ = s => document.querySelector(s);
 
 function pageEl(id){ return document.getElementById(id); }
@@ -439,6 +584,17 @@ function clearStates(keep){
     p.classList.remove('show','cur','under');
     p.style.transform=''; p.style.transition=''; p.style.visibility='';
   });
+}
+
+/* 显示一个根页面（入口页 / 商城小程序），清空 push 栈 */
+function showRoot(id){
+  const el = pageEl(id);
+  if(!el) return;
+  clearStates(el);
+  stack = [];
+  el.classList.add('show');
+  curRoot = id;
+  updateCapsule();
 }
 
 /* 切 Tab：当前页直接置顶，清空 push 栈 */
@@ -477,6 +633,7 @@ function navigate(id){
   void el.offsetWidth;                    // 强制重排，确保过渡起点生效
   el.style.transition='';
   el.style.transform='';                 // 交回 CSS：.page.show -> translateX(0)
+  if(id==='pg_player'){ toast('已开启防录屏水印保护'); updateWm(); }
   updateCapsule();
 }
 
@@ -507,7 +664,7 @@ function updateTabbar(){
   });
 }
 function updateCapsule(){
-  const dark = document.querySelector('.page.show .navbar.dark, .page.show.pg_splash, .player-screen.show, .page.show .profile-hd');
+  const dark = document.querySelector('.page.show .navbar.dark, .page.show.pg_splash, .page.show.pg_entry, .player-screen.show, .page.show .profile-hd');
   document.querySelectorAll('.capsule').forEach(c=>c.classList.toggle('dark', !!dark));
   document.querySelectorAll('.sysbar').forEach(s=>s.classList.toggle('dark', !!dark));
 }
@@ -531,6 +688,9 @@ document.addEventListener('click', e=>{
     else if(a[0]==='review'){ if(userState!=='approved'){ openMask('m_review'); return;} navigate('pg_'+a[2]); }
     else if(a[0]==='review-home'){ userState='review'; switchTab('home'); toast('游客预览模式 · 仅可浏览公开内容'); }
     else if(a[0]==='success'){ closeMask('m_success'); back(); }
+    else if(a[0]==='root'){ showRoot('pg_'+a[1]); }
+    else if(a[0]==='mall'){ toast('正在跳转「科迈森商城」小程序…'); setTimeout(()=>{ showRoot('pg_mall'); toast('已进入 科迈森商城 小程序（演示）'); },650); }
+    else if(a[0]==='masknav'){ closeMask(a[1]); navigate('pg_'+a[2]); }
     return;
   }
   // 收藏切换
@@ -556,14 +716,64 @@ function seekBar(bar,e){
   const sec=Math.floor(x*1490); toast('已跳转 '+Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0'));
 }
 
-// 启动页 loading
+// ===== 视频防录屏：动态溯源水印（姓名 + 手机号 + 实时时间）=====
+function updateWm(){
+  const el = document.getElementById('wm'); if(!el) return;
+  const d = new Date(); const p = n => String(n).padStart(2,'0');
+  el.textContent = '李慕白 · 138****8000 · ' + d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes());
+}
+setInterval(updateWm, 30000);
+// 录屏/切后台行为监测（模拟）：播放中离开页面再回来，提示已记录
+document.addEventListener('visibilitychange', ()=>{
+  if(document.visibilityState==='visible' && pageEl('pg_player').classList.contains('show')){
+    toast('检测到切后台行为 · 防录屏监测已记录');
+  }
+});
+
+// ===== 支付流程 =====
+function choosePay(m){
+  payMethod = m;
+  document.getElementById('pw_wx').classList.toggle('on', m==='wx');
+  document.getElementById('pw_site').classList.toggle('on', m==='site');
+}
+// 拉起微信支付密码弹层（演示：自动填充 6 位密码）
+function openPay(ctx){
+  payCtx = ctx;
+  const dots = document.querySelectorAll('#pay_dots i');
+  dots.forEach(d=>d.classList.remove('f'));
+  openMask('m_wxpay');
+  let n = 0;
+  const iv = setInterval(()=>{
+    n++; dots[n-1].classList.add('f');
+    if(n>=6){ clearInterval(iv);
+      setTimeout(()=>{ closeMask('m_wxpay'); payDone(); }, 420);
+    }
+  }, 240);
+}
+function confirmPay(){
+  if(payMethod==='wx'){ openPay('act'); }
+  else{ showPayResult('site'); }
+}
+function payDone(){
+  if(payCtx==='member') showPayResult('member');
+  else showPayResult('wx');
+}
+function showPayResult(kind){
+  ['wx','site','member'].forEach(k=>{
+    const el = document.getElementById('ok_'+k);
+    if(el) el.style.display = (k===kind ? 'block' : 'none');
+  });
+  navigate('pg_order_success');
+}
+
+// 启动页 loading -> 双入口页（学习平台 / 商城）
 function splash(){
   const tips=['正在初始化安全学习环境…','同步课程与培训数据…','加载医生学习档案…'];
   let p=0,i=0; const bar=$('#sp_bar'), tp=$('#sp_tip');
   const iv=setInterval(()=>{
     p+=Math.random()*9+4; if(p>100)p=100; bar.style.width=p+'%';
     tp.textContent=tips[Math.min(2,Math.floor(p/34))];
-    if(p>=100){ clearInterval(iv); setTimeout(()=>{ switchTab('home'); },500); }
+    if(p>=100){ clearInterval(iv); setTimeout(()=>{ showRoot('pg_entry'); },500); }
   },230);
 }
 window.addEventListener('load',()=>{ updateTabbar(); splash(); });
@@ -605,6 +815,10 @@ ICONS = {
  'wx':'<path d="M9 4C4.6 4 1 7 1 10.8c0 2.2 1.2 4.1 3 5.4L3.2 18l2.7-1.4c.9.25 1.8.4 2.8.4h.5a5.6 5.6 0 01-.2-1.5c0-3.3 3.1-6 7-6h.6C15.4 6 12.5 4 9 4z"/><path d="M23 14.5C23 11.5 20 9 16.5 9S10 11.5 10 14.5 13 20 16.5 20c.8 0 1.6-.13 2.3-.36L21 21l-.6-2.1c1.4-1 2.6-2.5 2.6-4.4z"/>',
  'edit':'<path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 013 3L12 15l-4 1 1-4z"/>',
  'plus':'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',
+ 'cart':'<circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/>',
+ 'crown':'<path d="M2.5 17.5l-1-10 6 4.5L12 4l4.5 8 6-4.5-1 10z"/><line x1="4" y1="21" x2="20" y2="21"/>',
+ 'shield':'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+ 'rmb':'<path d="M8 21h8M12 17v4M6 4l6 8 6-8"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="13" x2="16" y2="13"/>',
 }
 
 def ICON(name, size=24, cls=''):
@@ -707,8 +921,10 @@ S['pg_profile'] = f'''<div class="profile-hd" style="padding-top:56px">
 </div>
 <div class="body" style="padding:0">
   <div class="statbar"><div class="s"><div class="v">42.6</div><div class="l">学习时长(h)</div></div><div class="s"><div class="v">12</div><div class="l">已学课程</div></div><div class="s"><div class="v">28</div><div class="l">我的收藏</div></div></div>
+  <div class="vip-entry" data-go="nav:member"><div class="ic">{ICON("crown",19)}</div><div class="tx"><div class="t">年卡会员</div><div class="d">开通即解锁全部视频课程</div></div><div class="go">¥399 立即开通 ›</div></div>
   <div class="menu">
     <div class="m" data-go="nav:mylearn"><div class="ic">{ICON("book",18)}</div><div class="lb">我的学习</div><div class="rg">12 门 <span class="badge2">3</span>{ICON("arrow",15)}</div></div>
+    <div class="m" data-go="nav:orders"><div class="ic">{ICON("rmb",18)}</div><div class="lb">我的订单</div><div class="rg">3 笔 · 1 笔待支付{ICON("arrow",15)}</div></div>
     <div class="m" data-go="nav:mysignup"><div class="ic">{ICON("cal",18)}</div><div class="lb">我的报名</div><div class="rg">2 条{ICON("arrow",15)}</div></div>
     <div class="m" data-go="nav:myfav"><div class="ic">{ICON("star",18)}</div><div class="lb">我的收藏</div><div class="rg">28{ICON("arrow",15)}</div></div>
     <div class="m" data-go="nav:msg"><div class="ic">{ICON("bell",18)}</div><div class="lb">消息通知</div><div class="rg"><span class="badge2">5</span>{ICON("arrow",15)}</div></div>
@@ -739,6 +955,45 @@ S['pg_profile_edit'] = NB('个人资料', True) + f'''<div class="body" style="p
   <div style="margin:18px 16px"><div class="btn" data-go="toast" data-msg="资料已保存">保存</div></div>
 </div>'''
 
+# ---------- 会员中心（年卡购买） ----------
+S['pg_member'] = NB('会员中心', True) + f'''<div class="body" style="padding:0">
+  <div class="vipcard">
+    <div class="vip-hd"><span class="vip-name">{ICON("crown",18)} 年卡会员</span><span class="vip-tag">ANNUAL VIP</span></div>
+    <div class="vip-desc">全部视频课程 · 无限次观看 · 免审核快速报名通道</div>
+    <div class="vip-price"><span>¥</span>399<span>/ 年</span></div>
+    <div class="vip-ft">开通即时生效 · 到期自动提醒 · 不自动续费</div>
+  </div>
+  <div class="sec-h"><div class="t">会员权益对比</div></div>
+  <div class="cmp-card">
+    <div class="cmp-row hd"><div>权益</div><div>游客</div><div>报名学员</div><div>年卡会员</div></div>
+    <div class="cmp-row"><div>视频观看</div><div class="no">部分试看</div><div>指定章节</div><div class="ok">全部视频</div></div>
+    <div class="cmp-row"><div>权限开通方式</div><div class="no">—</div><div>后台按活动配置</div><div class="ok">自动解锁</div></div>
+    <div class="cmp-row"><div>课程缓存</div><div class="no">✕</div><div>部分</div><div class="ok">✓</div></div>
+    <div class="cmp-row" style="border-bottom:none"><div>专属客服</div><div class="no">✕</div><div class="no">✕</div><div class="ok">✓</div></div>
+  </div>
+  <div class="notice" style="margin-top:14px">{ICON("shield",18)}报名学员的「指定章节」权限由后台按培训活动勾选开通；年卡会员无需逐个开通，直接解锁全部视频。视频均启用防录屏溯源水印。</div>
+  <div style="margin:16px 16px 20px"><div class="btn" onclick="openPay('member')">立即开通 · ¥399/年</div></div>
+</div>'''
+
+# ---------- 我的订单 ----------
+S['pg_orders'] = NB('我的订单', True) + f'''<div class="body" style="padding:0">
+  <div class="order-card" style="margin-top:14px">
+    <div class="oh"><div class="t">宫腔镜四级手术高阶研修班</div><span class="badge b-ok">已支付</span></div>
+    <div class="om">订单号 KMS20261010093012 · 2026-10-10 09:30<br>微信支付 · 报名人 李慕白</div>
+    <div class="of"><span class="badge b-cyan">{ICON("play",10)} 配套视频权限已开通</span><span class="pr"><small style="font-size:12px">¥</small>1,980.00</span></div>
+  </div>
+  <div class="order-card">
+    <div class="oh"><div class="t">妇科能量器械规范化培训班</div><span class="badge b-warn">待现场支付</span></div>
+    <div class="om">订单号 KMS20260912153408 · 2026-09-12 15:34<br>现场支付 · 报名人 李慕白 · 11月02日 广州</div>
+    <div class="of"><span class="badge b-navy">{ICON("clock",10)} 后台标记后开通视频权限</span><span class="pr"><small style="font-size:12px">¥</small>1,680.00</span></div>
+  </div>
+  <div class="order-card">
+    <div class="oh"><div class="t">年卡会员（2026-2027）</div><span class="badge b-vip">已生效</span></div>
+    <div class="om">订单号 KMS20260928080000 · 2026-09-28 08:00<br>微信支付 · 自动续费已关闭</div>
+    <div class="of"><span class="badge b-vip">{ICON("crown",10)} 全部视频 · 有效期至 2027-09-28</span><span class="pr"><small style="font-size:12px">¥</small>399.00</span></div>
+  </div>
+</div>'''
+
 # ---------- 我的学习 ----------
 S['pg_mylearn'] = NB('我的学习', True) + f'''<div class="body" style="padding:0">
   <div class="card" style="margin:14px 16px;padding:14px">
@@ -761,9 +1016,9 @@ S['pg_mylearn'] = NB('我的学习', True) + f'''<div class="body" style="paddin
 
 # ---------- 我的报名 ----------
 S['pg_mysignup'] = NB('我的报名', True) + f'''<div class="body" style="padding:0">
-  <div class="li" style="margin-top:14px" data-go="nav:activity_detail">{ICON("cal",26)}<div class="ct"><div class="ti">宫腔镜四级手术高阶研修班</div><div class="me">报名时间 09-20 · 活动 10-18 东莞</div><div class="bo"><span class="badge b-ok" style="margin-left:0">已通过</span><span class="pr" style="margin-left:auto">平台已电话联系</span></div></div></div>
-  <div class="li" data-go="nav:activity_detail">{ICON("cal",26)}<div class="ct"><div class="ti">妇科能量器械规范化培训班</div><div class="me">报名时间 09-12 · 活动 11-02 广州</div><div class="bo"><span class="badge b-cyan" style="margin-left:0">待审核</span><span class="pr" style="margin-left:auto">{ICON("bell",12)} 审核中</span></div></div></div>
-  <div class="li" data-go="nav:activity_detail">{ICON("cal",26)}<div class="ct"><div class="ti">KMS 新品发布会 · 线上直播</div><div class="me">报名时间 09-25 · 活动 09-28 线上</div><div class="bo"><span class="badge b-warn" style="margin-left:0">已联系</span><span class="pr" style="margin-left:auto">会议链接已发送</span></div></div></div>
+  <div class="li" style="margin-top:14px" data-go="nav:activity_detail">{ICON("cal",26)}<div class="ct"><div class="ti">宫腔镜四级手术高阶研修班</div><div class="me">报名 09-20 · 活动 10-18 东莞 · 微信支付 ¥1,980</div><div class="bo"><span class="badge b-ok" style="margin-left:0">已支付</span><span class="badge b-cyan" style="margin-left:6px">{ICON("play",10)} 视频权限已开通</span><span class="pr" style="margin-left:auto">订单 KMS20261010…</span></div></div></div>
+  <div class="li" data-go="nav:activity_detail">{ICON("cal",26)}<div class="ct"><div class="ti">妇科能量器械规范化培训班</div><div class="me">报名 09-12 · 活动 11-02 广州 · 现场支付 ¥1,680</div><div class="bo"><span class="badge b-warn" style="margin-left:0">待现场支付</span><span class="badge b-navy" style="margin-left:6px">{ICON("clock",10)} 后台标记后开通</span><span class="pr" style="margin-left:auto">订单 KMS20260912…</span></div></div></div>
+  <div class="li" data-go="nav:activity_detail">{ICON("cal",26)}<div class="ct"><div class="ti">KMS 新品发布会 · 线上直播</div><div class="me">报名 09-25 · 活动 09-28 线上 · 免费</div><div class="bo"><span class="badge b-cyan" style="margin-left:0">已联系</span><span class="pr" style="margin-left:auto">会议链接已发送</span></div></div></div>
 </div>'''
 
 # ---------- 我的收藏 ----------
@@ -832,6 +1087,54 @@ S['pg_splash'] = f'''  <div class="glow"></div>
   <div class="bar"><i id="sp_bar"></i></div>
   <div class="tips" id="sp_tip"></div>
   <div class="ft">Powered by <b>KMS Medical Technology</b><br>© 2026 科迈森在线培训平台</div>'''
+
+# ---------- 启动后双入口页（学习平台 / 商城） ----------
+S['pg_entry'] = f'''  <div class="e-glow"></div>
+  <img class="e-logo" src="{LOGO_ICON}" alt="logo">
+  <div class="e-nm">科迈森</div>
+  <div class="e-su">KMS MEDICAL</div>
+  <div class="entry-card" data-go="tab:home">
+    <div class="ic learn">{ICON("book",26)}</div>
+    <div class="tx"><div class="t">科迈森学习平台</div><div class="d">在线课程 · 报名 · 学术资讯</div></div>
+    <div class="ar">{ICON("arrow",22)}</div>
+  </div>
+  <div class="entry-card" data-go="mall">
+    <div class="ic mall">{ICON("cart",26)}</div>
+    <div class="tx"><div class="t">科迈森商城</div><div class="d">器械正品 · 耗材 · 售后</div></div>
+    <div class="ar">{ICON("arrow",22)}</div>
+  </div>
+  <div class="entry-note">点击进入对应小程序</div>
+  <div class="e-ft">© 2026 KMS Medical Technology</div>'''
+
+# ---------- 科迈森商城（跳转商品小程序界面 · 演示） ----------
+def PRODUCT(img, title, spec, price, unit=''):
+    return (f'<div class="prod"><div class="pic {img_cls(img)}"></div><div class="ct">'
+        f'<div class="ti">{title}</div><div class="sp">{spec}</div>'
+        f'<div class="bo"><span class="pr"><small style="font-size:12px">¥</small>{price}</span><span style="font-size:11px;color:var(--t3);margin-left:2px">{unit}</span>'
+        f'<span class="btn sm" data-go="toast" data-msg="已加入购物车（演示）">加入购物车</span></div></div></div>')
+
+S['pg_mall'] = f'''<div class="navbar"><button class="back" data-go="root:entry">{ICON("back",24)}</button><div class="tt">科迈森商城</div><div class="more" data-go="toast" data-msg="商城客服（演示）">{ICON("more",22)}</div></div>
+<div class="body" style="padding:0">
+  <div class="mall-tip">{ICON("wx",14)} 已跳转至「科迈森商城」小程序 · 点击左上角返回学习平台</div>
+  <div class="mall-banner"><div class="t">厂家直营 · 器械正品</div><div class="d">宫腔镜 / 能量平台 / 一次性耗材 全国配送</div></div>
+  <div class="mall-cat">
+    <div class="mc" data-go="toast" data-msg="分类（演示）"><div class="ic">{ICON("videocam",19)}</div>检查镜</div>
+    <div class="mc" data-go="toast" data-msg="分类（演示）"><div class="ic">{ICON("edit",19)}</div>电切镜</div>
+    <div class="mc" data-go="toast" data-msg="分类（演示）"><div class="ic">{ICON("rmb",19)}</div>能量平台</div>
+    <div class="mc" data-go="toast" data-msg="分类（演示）"><div class="ic">{ICON("doc",19)}</div>一次性耗材</div>
+  </div>
+  <div class="sec-h"><div class="t">精选商品</div></div>
+  {PRODUCT('course-3.jpg','KMS 一次性宫腔镜检查镜 T30','30° · 外径 4.5mm · 含冲洗通道','3,200','/支')}
+  {PRODUCT('act-2.jpg','双极电凝钳（一次性）5mm×330mm','双极止血 · 配合 5mm 操作镜使用','1,280','/盒×5支')}
+  {PRODUCT('course-5.jpg','宫腔镜刨削系统 Blade-Ⅱ 主机','组织刨削 · 转速 1500rpm · 触控屏','86,000','/台')}
+  {PRODUCT('news-3.jpg','膨宫管路套装（无菌型）','一次性使用 · 适配主流膨宫泵','168','/套')}
+</div>
+<div class="tabbar">
+  <div class="tb" style="color:var(--cyanD);font-weight:600">{ICON("home",23)}商城</div>
+  <div class="tb" data-go="toast" data-msg="分类（演示）">{ICON("doc",23)}分类</div>
+  <div class="tb" data-go="toast" data-msg="购物车（演示）">{ICON("cart",23)}购物车</div>
+  <div class="tb" data-go="toast" data-msg="商城我的（演示）">{ICON("user",23)}我的</div>
+</div>'''
 
 # ---------- 登录 ----------
 S['pg_login'] = NB('登录', True) + f'''<div class="body" style="padding:0">
@@ -958,6 +1261,13 @@ S['pg_course_detail'] = NB('课程详情', True) + f'''<div class="body" style="
     <div style="display:flex;gap:10px;align-items:center;margin-top:10px;color:var(--t2);font-size:12.5px">{ICON("user",14)} 王建国 主任医师 · 北京协和医院</div>
     <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-top:10px">系统讲解子宫纵隔的术前评估、TCRF 术式选择、能量器械参数设置与并发症预防，配套 4K 手术视频逐帧解析。</div>
   </div>
+  <div class="card" style="margin:14px 16px 0;padding:14px">
+    <div style="display:flex;align-items:center;gap:8px;font-weight:700;font-size:14.5px">{ICON("lock",16)} 观看权限</div>
+    <div class="perm-row"><span class="badge b-navy">免费试看</span><span>所有人可看 · 前 2 节基础内容（合计 8:24）</span></div>
+    <div class="perm-row"><span class="badge b-cyan">报名学员</span><span>报名「宫腔镜四级手术高阶研修班」并完成缴费后，后台勾选开通配套章节</span></div>
+    <div class="perm-row"><span class="badge b-vip">年卡会员</span><span>全部视频无限次观看 <a data-go="nav:member" style="color:var(--cyan2);font-weight:600;margin-left:4px">立即开通 ›</a></span></div>
+  </div>
+  <div class="chapter-lock" data-go="mask:m_perm">{ICON("lock",18)}<div style="flex:1">05 · 并发子宫肌瘤的处理（会员专享 · 报名学员可看）<div style="font-size:11px;color:var(--t3);margin-top:2px">点击查看解锁方式</div></div><span class="lk">解锁 ›</span></div>
   <div class="tabs" style="margin-top:14px"><div class="t on">课程介绍</div><div class="t">学员评价</div></div>
   <div style="padding:14px 16px;color:var(--t2);font-size:13.5px;line-height:1.8">
     · 术前评估：超声 + 宫腔镜联合诊断要点<br>· 手术演示：单极电切环参数设定（60W 切割）<br>· 并发症：穿孔、水中毒的早期识别与处理<br>· 术后：雌激素预防再粘连方案
@@ -966,18 +1276,22 @@ S['pg_course_detail'] = NB('课程详情', True) + f'''<div class="body" style="
   {COURSE_CARD(('冷刀宫腔镜临床应用要点','陈敏 教授','四川大学华西','1577','宫腔镜'))}
   {COURSE_CARD(('KMS 电切镜系统标准操作','李慕白 副主任医师','东莞市人民医院','964','能量器械'))}
 </div>
-<div class="tabbar" style="height:62px"><div data-fav="1" class="btn ghost sm" style="margin:0 10px 0 16px;flex:0 0 auto">{ICON("heart",16)} 收藏</div><div data-go="nav:msg" class="btn ghost sm" style="margin:0 10px 0 0;flex:0 0 auto">{ICON("share",16)} 分享</div><div class="btn" style="flex:1;margin:0 16px 0 0" data-go="review:nav:player" data-msg="">立即学习</div></div>'''
+<div class="tabbar" style="height:62px"><div data-fav="1" class="btn ghost sm" style="margin:0 10px 0 16px;flex:0 0 auto">{ICON("heart",16)} 收藏</div><div data-go="toast" data-msg="视频受版权保护，禁止外传与录屏" class="btn ghost sm" style="margin:0 10px 0 0;flex:0 0 auto">{ICON("share",16)} 分享</div><div class="btn" style="flex:1;margin:0 16px 0 0" data-go="review:nav:player" data-msg="">立即学习</div></div>'''
 
-# ---------- 视频播放 ----------
+# ---------- 视频播放（含防录屏水印） ----------
 S['pg_player'] = f'''  <div class="navbar"><button class="back" data-go="back">{ICON("back",24)}</button><div class="tt">子宫纵隔切开术</div><div class="more">{ICON("more",22)}</div></div>
-  <div class="player-area"><div class="poster cover {img_cls(pick_img(COURSE_IMGS,'子宫纵隔切开术'))}"></div><div class="bigplay" data-go="toast" data-msg="播放/暂停（演示）">{ICON("play",28)}</div></div>
+  <div class="player-area"><div class="poster cover {img_cls(pick_img(COURSE_IMGS,'子宫纵隔切开术'))}"></div><div class="bigplay" data-go="toast" data-msg="播放/暂停（演示）">{ICON("play",28)}</div>
+    <div class="wm" id="wm">李慕白 · 138****8000 · 2026-10-10 12:30</div>
+    <div class="wm2">{ICON("shield",11)} 防录屏 · 溯源水印已开启</div>
+  </div>
   <div class="player-ctrl">
     <div class="ti">子宫纵隔切开术 · 4K 完整演示</div>
     <div class="progress"><span class="tm">08:24</span><div class="bar" onclick="seekBar(this,event)"><i></i></div><span class="tm">24:50</span></div>
     <div class="tools">
       <div class="ic" data-go="toast" data-msg="已开启高清">{ICON("videocam",20)} 高清</div>
       <div class="ic" data-fav="1">{ICON("heart",20)} 收藏</div>
-      <div class="ic" data-go="nav:msg">{ICON("share",20)} 分享</div>
+      <div class="ic" data-go="toast" data-msg="视频受版权保护，禁止外传">{ICON("share",20)} 分享</div>
+      <div class="ic" data-go="toast" data-msg="防录屏水印运行中，录屏内容将带溯源">{ICON("shield",20)} 防录屏</div>
       <div class="ic q" data-go="toast" data-msg="已切换全屏">⛶ 全屏</div>
     </div>
   </div>'''
@@ -985,6 +1299,7 @@ S['pg_player'] = f'''  <div class="navbar"><button class="back" data-go="back">{
 # page wrapper metadata: extra classes / initial-show
 PAGE_META = {
   'pg_splash': 'pg_splash show',
+  'pg_entry': 'pg_entry',
   'pg_player': 'player-screen',
   'pg_home': 'tab',
   'pg_course': 'tab',
@@ -1015,6 +1330,16 @@ S['pg_activity_detail'] = NB('活动详情', True) + f'''<div class="body" style
     <div style="display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:10px;color:var(--t2);font-size:12.5px">
       {ICON("clock",14)} 2026-10-18 至 10-20<br>{ICON("pin",14)} 广东 · 东莞（线下）<br>{ICON("user",14)} 王建国 等 4 位专家<br>{ICON("badge",14)} 国家级继续教育学分</div>
     <div style="font-size:13px;color:var(--t2);line-height:1.7;margin-top:10px">面向妇科微创医师的进阶研修班，理论 + 动物实验 + 手术观摩三位一体，限额 100 人，报满即止。</div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px dashed var(--line2);display:flex;align-items:center;gap:10px">
+      <span class="badge b-navy">{ICON("rmb",11)} 培训费</span>
+      <span style="font-size:20px;font-weight:800;color:var(--bad)">¥1,980</span>
+      <span style="font-size:11.5px;color:var(--t3)">/ 人 · 含教材与动物实验</span>
+    </div>
+  </div>
+  <div class="card" style="margin:14px 16px 0;padding:14px">
+    <div style="font-weight:700;font-size:14px">{ICON("lock",16)} 视频权益</div>
+    <div class="perm-row"><span class="badge b-cyan">报名学员</span><span>完成缴费后由后台勾选开通本活动配套指定课程视频</span></div>
+    <div class="perm-row"><span class="badge b-vip">年卡会员</span><span>报名仍需单独缴费，但可直接观看所有配套视频 <a data-go="nav:member" style="color:var(--cyan2);font-weight:600;margin-left:4px">立即开通 ›</a></span></div>
   </div>
   <div class="tabs" style="margin-top:14px"><div class="t on">活动介绍</div><div class="t">讲师团队</div><div class="t">报名须知</div></div>
   <div style="padding:14px 16px;color:var(--t2);font-size:13.5px;line-height:1.8">
@@ -1023,11 +1348,11 @@ S['pg_activity_detail'] = NB('活动详情', True) + f'''<div class="body" style
   <div class="sec-h" style="margin-top:4px"><div class="t">相关活动</div></div>
   {ACT_CARD(('妇科能量器械规范化培训班','11月02日 · 广州','线下','120','即将开始'))}
 </div>
-<div class="tabbar" style="height:62px"><div data-fav="1" class="btn ghost sm" style="margin:0 10px 0 16px;flex:0 0 auto">{ICON("heart",16)} 收藏</div><div data-go="nav:msg" class="btn ghost sm" style="margin:0 10px 0 0;flex:0 0 auto">{ICON("share",16)} 分享</div><div class="btn" style="flex:1;margin:0 16px 0 0" data-go="nav:signup" data-msg="">立即报名</div></div>'''
+<div class="tabbar" style="height:62px"><div data-fav="1" class="btn ghost sm" style="margin:0 10px 0 16px;flex:0 0 auto">{ICON("heart",16)} 收藏</div><div data-go="toast" data-msg="活动海报受版权保护，禁止外传" class="btn ghost sm" style="margin:0 10px 0 0;flex:0 0 auto">{ICON("share",16)} 分享</div><div class="btn" style="flex:1;margin:0 16px 0 0" data-go="nav:signup" data-msg="">立即报名 ¥1,980</div></div>'''
 
-# ---------- 报名表单 ----------
+# ---------- 报名表单（含报名费） ----------
 S['pg_signup'] = NB('活动报名', True) + f'''<div class="body" style="padding:0">
-  <div class="notice">{ICON("info",18)}本平台仅提供报名登记，不涉及线上付费。提交后由平台与您电话联系对接。</div>
+  <div class="notice">{ICON("rmb",18)}<span>本次培训收取报名费 <b>¥1,980</b>（含教材与动物实验材料）。提交报名后在线支付或选择现场支付；完成缴费后，后台将为您开通本活动配套的指定课程视频观看权限。</span></div>
   <div class="field">
     <div class="row"><label>姓名</label><input value="李慕白"></div>
     <div class="row"><label>手机号</label><input value="138 0013 8000"></div>
@@ -1036,14 +1361,72 @@ S['pg_signup'] = NB('活动报名', True) + f'''<div class="body" style="padding
     <div class="row"><label>科室</label><input value="妇科"><span class="arrow">{ICON("arrow",16)}</span></div>
     <div class="row" style="align-items:flex-start"><label style="padding-top:14px">备注</label><textarea placeholder="选填，最多200字（如特殊饮食、住宿需求）" rows="2"></textarea></div>
   </div>
-  <div style="margin:20px 16px"><div class="btn" data-go="mask:m_success" data-msg="">确认报名</div></div>
+  <div class="order-card" style="margin-top:14px">
+    <div class="oh"><div class="t" style="font-size:14px">报名费</div><span class="badge b-live">报名中 · 限额100人</span></div>
+    <div class="om">宫腔镜四级手术高阶研修班 · 10月18日-20日 · 东莞<br>含 3 天课程 / 教材 / 动物实验材料 / 结业证书</div>
+    <div class="of"><span class="badge b-navy">培训费</span><span class="pr"><small style="font-size:12px">¥</small>1,980<small style="font-size:12px;color:var(--t3)">.00</small></span></div>
+  </div>
+  <div class="notice" style="background:rgba(14,189,142,.07);color:var(--ok)">{ICON("check",18)}已报名缴费的学员，可在「我的-我的订单」查看由后台开通的配套视频权限。</div>
+  <div style="margin:14px 16px 20px"><div class="btn" data-go="nav:pay">提交报名 · 去支付</div></div>
 </div>'''
 
-ORDER = ['pg_splash','pg_login','pg_reg1','pg_reg2','pg_reg3','pg_review',
+# ---------- 订单支付页（微信支付 / 现场支付） ----------
+S['pg_pay'] = NB('确认支付', True) + f'''<div class="body" style="padding:0">
+  <div class="pay-amount-card">
+    <div class="lbl">培训报名费</div>
+    <div class="amt"><small>¥</small>1,980<small>.00</small></div>
+    <div class="sub">宫腔镜四级手术高阶研修班 · 2026-10-18 至 10-20 · 东莞</div>
+  </div>
+  <div class="field" style="margin-top:0">
+    <div class="row"><label>报名人</label><input value="李慕白" readonly style="color:var(--t2)"></div>
+    <div class="row"><label>手机号</label><input value="138 0013 8000" readonly style="color:var(--t2)"></div>
+    <div class="row"><label>订单编号</label><input value="KMS20261010093012" readonly style="color:var(--t2);font-size:12.5px"></div>
+  </div>
+  <div class="sec-h"><div class="t">支付方式</div></div>
+  <div class="payway-card">
+    <div class="pw on" id="pw_wx" onclick="choosePay('wx')"><span class="pic wx">{ICON("wx",21)}</span><div class="tx"><div class="t">微信支付</div><div class="d">本机微信支付，支付成功自动开通视频权限</div></div><span class="radio"></span></div>
+    <div class="pw" id="pw_site" onclick="choosePay('site')"><span class="pic site">{ICON("pin",21)}</span><div class="tx"><div class="t">现场支付</div><div class="d">活动当天现场缴费，缴费后由后台标记支付状态</div></div><span class="radio"></span></div>
+  </div>
+  <div class="notice">{ICON("info",18)}<span>选择「现场支付」将先完成报名，订单为 <b>待支付</b> 状态；现场缴费后工作人员在后台标记支付，并同步开通配套视频观看权限。</span></div>
+  <div style="margin:16px 16px 20px"><div class="btn" onclick="confirmPay()">确认支付 ¥1,980.00</div></div>
+</div>'''
+
+# ---------- 支付结果页（微信支付成功 / 现场支付待确认 / 会员开通成功） ----------
+S['pg_order_success'] = NB('支付结果', True) + f'''<div class="body" style="padding:0">
+  <div id="ok_wx" class="payres" style="display:none">
+    <div class="res-ic ok">{ICON("check",42)}</div>
+    <div class="rt">支付成功</div>
+    <div class="rd">微信支付 ¥1,980.00 · 订单号 KMS20261010093012</div>
+    <div class="res-badges"><span class="badge b-ok">后台已标记支付状态</span><span class="badge b-cyan">配套视频权限已开通</span></div>
+    <div class="res-note">已为您开通「宫腔镜四级手术高阶研修班」配套指定课程视频的观看权限，可在「我的 - 我的订单」查看权益明细。完成课程学习并通过考核后可获得结业证书。</div>
+    <div style="margin-top:26px"><div class="btn" data-go="nav:orders">查看我的订单</div></div>
+    <div style="margin-top:12px"><div class="btn ghost" data-go="tab:home">返回首页</div></div>
+  </div>
+  <div id="ok_site" class="payres" style="display:none">
+    <div class="res-ic warn">{ICON("clock",42)}</div>
+    <div class="rt">报名成功 · 待现场支付</div>
+    <div class="rd">现场支付 ¥1,980.00 · 订单号 KMS20261010093012</div>
+    <div class="res-badges"><span class="badge b-warn">订单待支付</span><span class="badge b-navy">现场缴费后由后台标记</span></div>
+    <div class="res-note">活动当天（10月18日）签到时现场缴费，缴费成功后工作人员将在<b>后台标记订单支付状态</b>，并同步为您开通配套课程视频观看权限；标记前相关视频暂不可观看。</div>
+    <div style="margin-top:26px"><div class="btn" data-go="nav:orders">查看我的订单</div></div>
+    <div style="margin-top:12px"><div class="btn ghost" data-go="tab:home">返回首页</div></div>
+  </div>
+  <div id="ok_member" class="payres" style="display:none">
+    <div class="res-ic vip">{ICON("crown",40)}</div>
+    <div class="rt">会员开通成功</div>
+    <div class="rd">年卡会员 · 微信支付 ¥399.00</div>
+    <div class="res-badges"><span class="badge b-vip">全部视频观看权限已解锁</span><span class="badge b-ok">有效期至 2027-10-10</span></div>
+    <div class="res-note">会员有效期内可<b>无限次观看平台全部视频课程</b>；线下培训活动仍需单独报名缴费，报名学员的指定章节权限由后台配置开通。</div>
+    <div style="margin-top:26px"><div class="btn" data-go="tab:course">去看课程</div></div>
+    <div style="margin-top:12px"><div class="btn ghost" data-go="tab:home">返回首页</div></div>
+  </div>
+</div>'''
+
+ORDER = ['pg_splash','pg_entry','pg_mall','pg_login','pg_reg1','pg_reg2','pg_reg3','pg_review',
          'pg_home','pg_course','pg_course_detail','pg_player',
-         'pg_activity','pg_activity_detail','pg_signup',
+         'pg_activity','pg_activity_detail','pg_signup','pg_pay','pg_order_success',
          'pg_news','pg_article','pg_about',
-         'pg_profile','pg_profile_edit','pg_mylearn','pg_mysignup','pg_myfav',
+         'pg_profile','pg_profile_edit','pg_member','pg_orders','pg_mylearn','pg_mysignup','pg_myfav',
          'pg_msg','pg_contact','pg_aboutus','pg_forgot']
 
 # 公共 SVG 定义（图标 symbol）
@@ -1055,6 +1438,7 @@ def build():
     html = f"""<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>科迈森在线培训 · 小程序原型</title><style>{CSS}
+{CSS_EXTRA}
 {IMG_CSS}</style></head>
 <body>{DEFS}
 <div class="stage"><div class="cap">科迈森在线培训学习平台 · 微信小程序原型<span>品牌A 科技青环 · 页面可点击跳转 · 左下角页面导航</span></div>
@@ -1066,6 +1450,8 @@ def build():
     {pages}
     <div class="mask" id="m_success"><div class="pop"><div class="pic">{ICON('check',32)}</div><div class="pt">报名提交成功</div><div class="pd">我们已收到您的报名信息，平台将在 1-2 个工作日内与您电话联系对接。<br>本平台不涉及线上付费。</div><div class="pbtn btn" data-go="success" style="margin:0">我知道了</div></div></div>
     <div class="mask" id="m_review"><div class="pop"><div class="pic" style="background:linear-gradient(135deg,#FFB547,#E0962A)">{ICON('lock',32)}</div><div class="pt">账号审核中</div><div class="pd">您的医生资质正在审核，审核通过后可观看课程视频与报名培训活动。<br>审核结果将通过微信服务通知告知。</div><div class="pbtn btn" data-go="closemask:m_review" style="margin:0">我知道了</div></div></div>
+    <div class="mask" id="m_perm"><div class="pop"><div class="pic" style="background:linear-gradient(135deg,#F7D774,#D4A017);color:#6b4d00">{ICON('lock',32)}</div><div class="pt">视频权限说明</div><div class="pd">该章节对 <b>年卡会员</b> 与 <b>报名学员（后台开通）</b> 开放。报名学员观看权限由后台按培训活动勾选开通；年卡会员无需单独开通，直接解锁全部视频。<br><br><span style="color:var(--t1);font-weight:600">已开放：</span>免费试看前 2 节 · 已完成报名的配套指定章节</div><div class="pbtn btn" data-go="masknav:m_perm:member" style="margin:0">开通年卡会员 · ¥399</div><div class="pbtn btn ghost" data-go="masknav:m_perm:activity" style="margin:10px 0 0">报名培训开通指定章节</div><div class="pbtn btn ghost" data-go="closemask:m_perm" style="margin:10px 0 0">先免费试看</div></div></div>
+    <div class="mask paymask" id="m_wxpay"><div class="sheet"><div class="sh-hd">微信支付</div><div class="sh-amt" id="pay_amt">¥1,980.00</div><div class="dots" id="pay_dots"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="sh-tip">请输入支付密码（演示自动填充）</div></div></div>
     <div class="toast" id="toast"></div>
   </div>
 </div></div>
